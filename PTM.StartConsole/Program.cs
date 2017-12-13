@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Windows.Forms;
+using System.IO;
 using PTM.Httpd;
 
 namespace PTM.StartConsole
@@ -7,31 +9,16 @@ namespace PTM.StartConsole
     {
         static void Main(string[] args)
         {
+
+            string webpath = Path.GetDirectoryName(Application.ExecutablePath);
+            webpath = Path.Combine(webpath, "web");
             var server = ServerFactory.NewInstance(9999);
-            server.SetRootPath(@"C:\work\study");
+            server.SetRootPath(webpath);
             server.Set("/", (res, req) =>
             {
-                req.SetCookie("test", "aaa", DateTime.Now.AddMinutes(5));
-                req.SetSession("aaaaa", "asdfasfd");
-                req.ReadFile(@"C:\work\study\index.html");
-            });
-            server.Set("/submit.html", (res, req) =>
-            {
-                if (!res.IsPost())
-                {
-                    return;
-                }
-                Console.WriteLine("session : " + res.GetSession("aaaaa"));
-                Console.WriteLine("submit");
-                Console.WriteLine(res.View());
-                foreach (var item in res.PostString)
-                {
-                    Console.WriteLine("key :" + item.Key + "value : " + item.Value);
-                }
-                //req.StateOK();
-                req.ContextType = "text/html";
-                req.Body = "Test";
-                Console.WriteLine(req.View());
+                //req.SetCookie("test", "aaa", DateTime.Now.AddMinutes(5));
+                //req.SetSession("aaaaa", "asdfasfd");
+                req.ReadFile(webpath + @"\index.html");
             });
             server.SetWebSocket(mes =>
             {
