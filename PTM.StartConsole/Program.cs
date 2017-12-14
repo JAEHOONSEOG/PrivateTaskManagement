@@ -6,11 +6,13 @@ using PTM.Httpd;
 using PTM.ORM;
 using PTM.ORM.Dao;
 using PTM.ORM.Entity;
+using PTM.WindowForm;
 
 namespace PTM.StartConsole
 {
     class Program
     {
+        [STAThread]
         static void Main(string[] args)
         {
             ITestDao dao = ORMFactory.GetService<ITestDao>(typeof(ITestDao));
@@ -49,7 +51,9 @@ namespace PTM.StartConsole
                 return new WebSocketNode() { OPCode = Opcode.MESSAGE, Message = "Hello world" };
             });
 
-            Console.ReadKey();
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new MainForm());
         }
     }
 }

@@ -76,6 +76,10 @@
       <Project>{84e73e85-0a99-4e35-b619-8c654e674bc3}</Project>
       <Name>PTM.ORM</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PTM.WindowForm\PTM.WindowForm.csproj">
+      <Project>{da7763b5-ff11-4b0a-a0b2-da7bbd7f3150}</Project>
+      <Name>PTM.WindowForm</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
