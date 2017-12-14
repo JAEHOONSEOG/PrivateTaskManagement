@@ -72,6 +72,10 @@
       <Project>{4dc47825-4463-4a5a-b386-7392961d9d71}</Project>
       <Name>PTM.Httpd</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PTM.ORM\PTM.ORM.csproj">
+      <Project>{84e73e85-0a99-4e35-b619-8c654e674bc3}</Project>
+      <Name>PTM.ORM</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
