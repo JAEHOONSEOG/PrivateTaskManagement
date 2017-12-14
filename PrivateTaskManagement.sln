@@ -11,6 +11,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PTM.Web", "PTM.Web\PTM.Web.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM.ORM", "PTM.ORM\PTM.ORM.csproj", "{84E73E85-0A99-4E35-B619-8C654E674BC3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTM.WindowForm", "PTM.WindowForm\PTM.WindowForm.csproj", "{DA7763B5-FF11-4B0A-A0B2-DA7BBD7F3150}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PTM.Web\PTM.Web.projitems*{63ff2f8d-07b1-43fc-9fac-cc34ba245819}*SharedItemsImports = 13
@@ -32,6 +34,10 @@ Global
 		{84E73E85-0A99-4E35-B619-8C654E674BC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84E73E85-0A99-4E35-B619-8C654E674BC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84E73E85-0A99-4E35-B619-8C654E674BC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA7763B5-FF11-4B0A-A0B2-DA7BBD7F3150}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA7763B5-FF11-4B0A-A0B2-DA7BBD7F3150}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA7763B5-FF11-4B0A-A0B2-DA7BBD7F3150}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA7763B5-FF11-4B0A-A0B2-DA7BBD7F3150}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

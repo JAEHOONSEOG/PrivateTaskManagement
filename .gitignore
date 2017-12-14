@@ -3,3 +3,5 @@
 /PTM.Httpd/obj
 /PTM.ORM/obj
 /PTM.StartConsole/obj
+/PTM.WindowForm/obj
+/packages

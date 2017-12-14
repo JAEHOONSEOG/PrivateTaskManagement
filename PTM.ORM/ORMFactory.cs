@@ -15,12 +15,16 @@ namespace PTM.ORM
     public class ORMFactory
     {
         private static ORMFactory instance = null;
-        public static T GetService<T>(Type type) where T : IDao
+        public static void Initialize()
         {
             if (instance == null)
             {
                 instance = new ORMFactory();
             }
+        }
+        public static T GetService<T>(Type type) where T : IDao
+        {
+            Initialize();
             if (!instance.servicemap.ContainsKey(type))
             {
                 throw new Exception("The instance dao is not declared.");
