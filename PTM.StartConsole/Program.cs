@@ -7,13 +7,19 @@ using PTM.ORM;
 using PTM.ORM.Dao;
 using PTM.ORM.Entity;
 using PTM.WindowForm;
+using PTM.Httpd.Util;
 
 namespace PTM.StartConsole
 {
     class Program
     {
-        [STAThread]
-        static void Main(string[] args)
+        public Program()
+        {
+            Database();
+            WebServer();
+            WindowForm();
+        }
+        private void Database()
         {
             ITestDao dao = ORMFactory.GetService<ITestDao>(typeof(ITestDao));
             Test test = new Test();
@@ -33,8 +39,10 @@ namespace PTM.StartConsole
             }
             dao.Delete(test);
             result = dao.Select();
-            Console.WriteLine("Count: "+result.Count);
-
+            Console.WriteLine("Count: " + result.Count);
+        }
+        private void WebServer()
+        {
             string webpath = Path.GetDirectoryName(Application.ExecutablePath);
             webpath = Path.Combine(webpath, "web");
             var server = ServerFactory.NewInstance(9999);
@@ -48,12 +56,38 @@ namespace PTM.StartConsole
             server.SetWebSocket(mes =>
             {
                 Console.WriteLine(mes);
-                return new WebSocketNode() { OPCode = Opcode.MESSAGE, Message = "Hello world" };
+                WSNode node = WSNode.ToNode(mes.ToString());
+                if (node.Type == 1 && "cardmenu".Equals(node.Key))
+                {
+                    node.Data = ReadFile(webpath + @"\flow\cardmenu.html").ToString();
+                }
+                return new WebSocketNode() { OPCode = Opcode.BINARY, Message = node.ToString2() };
             });
-
+        }
+        private String2 ReadFile(String path)
+        {
+            FileInfo info = new FileInfo(path);
+            if (!info.Exists)
+            {
+                return null;
+            }
+            String2 temp = new String2((int)info.Length);
+            using(FileStream stream = new FileStream(info.FullName, FileMode.Open, FileAccess.Read))
+            {
+                stream.Read(temp.ToBytes(), 0, temp.Length);
+            }
+            return temp;
+        }
+        private void WindowForm()
+        {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
+        }
+        [STAThread]
+        static void Main(string[] args)
+        {
+            new Program();
         }
     }
 }

@@ -16,7 +16,7 @@ namespace PTM.Httpd.Impl
         private Server _server;
         private Func<String2, WebSocketNode> _method;
 
-        public WebSocket(Socket socket, Server server,Request req, Func<String2, WebSocketNode> method)
+        public WebSocket(Socket socket, Server server, Request req, Func<String2, WebSocketNode> method)
         {
             this._socket = socket;
             this._header = req;
@@ -67,10 +67,17 @@ namespace PTM.Httpd.Impl
                                     buffer[i] = (byte)(buffer[i] ^ key[i % 4]);
                                 }
                             }
-                            if(this._method != null)
+                            if (this._method != null)
                             {
                                 WebSocketNode node = this._method(buffer);
-                                Send((int)node.OPCode, node.Message);
+                                if (node.IsBroadCast)
+                                {
+                                    _server.Send((int)node.OPCode, node.Message);
+                                }
+                                else
+                                {
+                                    Send((int)node.OPCode, node.Message);
+                                }
                             }
                             continue;
                         }
@@ -87,7 +94,14 @@ namespace PTM.Httpd.Impl
                             if (this._method != null)
                             {
                                 WebSocketNode node = this._method(buffer);
-                                Send((int)node.OPCode, node.Message);
+                                if (node.IsBroadCast)
+                                {
+                                    _server.Send((int)node.OPCode, node.Message);
+                                }
+                                else
+                                {
+                                    Send((int)node.OPCode, node.Message);
+                                }
                             }
                             continue;
                         }
