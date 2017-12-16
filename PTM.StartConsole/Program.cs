@@ -57,9 +57,24 @@ namespace PTM.StartConsole
             {
                 Console.WriteLine(mes);
                 WSNode node = WSNode.ToNode(mes.ToString());
-                if (node.Type == 1 && "cardmenu".Equals(node.Key))
+                if (node.Type == 1)
                 {
-                    node.Data = ReadFile(webpath + @"\flow\cardmenu.html").ToString();
+                    if ("cardmenu".Equals(node.Key))
+                    {
+                        node.Data = ReadFile(webpath + @"\flow\cardmenu.html").ToString();
+                    }
+                    else if ("memolist".Equals(node.Key))
+                    {
+                        node.Data = ReadFile(webpath + @"\flow\memo_insert.html").ToString();
+                    }
+                }
+                else if (node.Type == 2)
+                {
+                    if ("memo_insert".Equals(node.Key))
+                    {
+                        Console.WriteLine(node.Data);
+                        node.Data = null;
+                    }
                 }
                 return new WebSocketNode() { OPCode = Opcode.BINARY, Message = node.ToString2() };
             });
@@ -72,7 +87,7 @@ namespace PTM.StartConsole
                 return null;
             }
             String2 temp = new String2((int)info.Length);
-            using(FileStream stream = new FileStream(info.FullName, FileMode.Open, FileAccess.Read))
+            using (FileStream stream = new FileStream(info.FullName, FileMode.Open, FileAccess.Read))
             {
                 stream.Read(temp.ToBytes(), 0, temp.Length);
             }

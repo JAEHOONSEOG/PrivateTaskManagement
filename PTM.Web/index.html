@@ -26,6 +26,8 @@
 	<script src="./js/sb-admin-2.js"></script>
 	<link href="./css/common.css" rel="stylesheet">
 	<script src="./js/common.js"></script>
+	<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
     <title></title>
 	<script>
 		var sub = {
@@ -37,15 +39,18 @@
 					ins.loadPage("cardmenu");
 				});
 				$(document).on("click", "#MemoPanel,#MemoMenu", function() {
-					ins.loadPage("cardmenu");
+					ins.loadPage("memolist");
 				});
 				$(document).on("click", "#SettingsPanel,#SettingsMenu", function() {
 					ins.loadPage("cardmenu");
 				});
 				ins.loadPage("cardmenu");
 			},
-			cardmenu: function(data) {
-				ins.loadContents(data);
+			cardmenu: function(node) {
+				ins.loadContents(node.Data);
+			},
+			memolist: function(node) {
+				ins.loadContents(node.Data);
 			}
 		};
 	</script>
@@ -78,7 +83,7 @@
             </div>
             <!-- /.navbar-static-side -->
         </nav>
-
+		<div class="message-zone"></div>
         <div id="page-wrapper">
             <div class="container-fluid" id="contents" />
         </div>
