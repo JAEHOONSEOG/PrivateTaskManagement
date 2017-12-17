@@ -60,7 +60,8 @@ var ins = (function(obj) {
 		if(!ins.page_move) {
 			if(!confirm("Are you sure you want to navigate away from this page?\n\nYou have started writing or editing a post.\n\nPress OK to continue or Cancel to stay on the current page.")) {
 				return false;
-			}
+            }
+            ins.page_move = true;
 		}
 		var node = new Node(1, name, param);
 		ins.send(node.toJson());

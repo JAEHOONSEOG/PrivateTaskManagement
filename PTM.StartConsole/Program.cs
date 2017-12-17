@@ -23,16 +23,17 @@ namespace PTM.StartConsole
         }
         private void WebServer()
         {
-            string webpath = Path.GetDirectoryName(Application.ExecutablePath);
-            webpath = Path.Combine(webpath, "web");
+            string path = Path.GetDirectoryName(Application.ExecutablePath);
             var server = ServerFactory.NewInstance(9999);
-            server.SetRootPath(webpath);
-            server.Set("/", (res, req) =>
+            server.SetDefaultFile("index.html");
+            server.SetZip(path + "\\html.data");
+            //server.SetRootPath(webpath);
+            /*server.Set("/", (res, req) =>
             {
                 //req.SetCookie("test", "aaa", DateTime.Now.AddMinutes(5));
                 //req.SetSession("aaaaa", "asdfasfd");
                 req.ReadFile(webpath + @"\index.html");
-            });
+            });*/
             server.SetWebSocket(mes =>
             {
                 //Console.WriteLine(mes);
@@ -41,11 +42,13 @@ namespace PTM.StartConsole
                 {
                     if ("cardmenu".Equals(node.Key))
                     {
-                        node.Data = ReadFile(webpath + @"\flow\cardmenu.html").ToString();
+                        node.Data = server.GetZipFile(@"/flow/cardmenu.html").ToString();
+                        //node.Data = ReadFile(webpath + @"\flow\cardmenu.html").ToString();
                     }
                     else if ("memolist".Equals(node.Key))
                     {
-                        node.Data = ReadFile(webpath + @"\flow\memo_insert.html").ToString();
+                        node.Data = server.GetZipFile(@"/flow/memo_insert.html").ToString();
+                        //node.Data = ReadFile(webpath + @"\flow\memo_insert.html").ToString();
                     }
                 }
                 else if (node.Type == 2)

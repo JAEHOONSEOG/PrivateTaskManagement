@@ -1,2 +1,5 @@
 ﻿echo off
-zip html.data index.html js/* flow/* css/*
+cd ..
+cd ..
+cd PTM.WEb
+zip ..\bin\Debug\html.data index.html css\* js\* flow\*
