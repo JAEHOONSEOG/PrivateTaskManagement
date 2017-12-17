@@ -1,0 +1,54 @@
+.row.row-panel
+{
+	margin-top: 30px;
+}
+
+.contents-text
+{
+    margin-top: 40px;
+	font-size: 15pt;
+}
+
+.panel>.panel-heading
+{
+	border: 0px;
+}
+
+.panel-info>.panel-heading:hover
+{
+	color: #fff;
+	background-color: #9db8c5;
+}
+
+.panel-success>.panel-heading:hover
+{
+	color: #fff;
+	background-color: #61c338;
+}
+
+.panel-warning>.panel-heading:hover
+{
+	color: #fff;
+	background-color: #e6c519;
+}
+
+.panel-danger>.panel-heading:hover
+{
+	color: #fff;
+	background-color: #a94442;
+}
+
+.panel-primary>.panel-heading:hover
+{
+	background-color: #23527c;
+	border-color: #23527c;
+}
+
+.panel-heading:hover
+{
+	cursor: pointer;
+}
+ul.nav>li>a
+{
+	cursor: pointer;
+}

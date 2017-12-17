@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading;
 using PTM.Httpd.Util;
 using System.IO;
+using System.Linq;
 
 namespace PTM.Httpd.Impl
 {
@@ -118,6 +119,13 @@ namespace PTM.Httpd.Impl
         public void RemoveWebSocket(WebSocket socket)
         {
             socketlist.Remove(socket);
+        }
+        public void Send(int opcode, String2 data)
+        {
+            socketlist.AsParallel().ForAll(_client =>
+            {
+                _client.Send(opcode, data);
+            });
         }
 
         public Dictionary<String, Object> GetSession(String key)
