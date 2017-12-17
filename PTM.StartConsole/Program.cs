@@ -17,7 +17,6 @@ namespace PTM.StartConsole
         public Program()
         {
             ORMFactory.Initialize();
-
             WebServer();
             WindowForm();
         }
