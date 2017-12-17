@@ -5,7 +5,9 @@ using System.Net;
 using System.Threading;
 using PTM.Httpd.Util;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using Ionic.Zip;
 
 namespace PTM.Httpd.Impl
 {
@@ -21,6 +23,8 @@ namespace PTM.Httpd.Impl
         private Func<String2, WebSocketNode> _websocket_method_list;
         private List<WebSocket> socketlist = new List<WebSocket>();
         private String _rootpath = null;
+        private Dictionary<String2, String2> zipmap = new Dictionary<String2, String2>();
+        private String _default = null;
         public Server(int port) : base(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP)
         {
             Bind(new IPEndPoint(IPAddress.Any, port));
@@ -55,13 +59,32 @@ namespace PTM.Httpd.Impl
                                     return;
                                 }
                                 Response res = new Response(this, req);
-                                if (_method_list.ContainsKey(req.Uri))
+                                String2 url = req.Uri;
+                                if (_default != null && url.ToString().Equals("/"))
                                 {
-                                    _method_list[req.Uri](req, res);
+                                    url += _default;
+                                }
+
+                                if (_method_list.ContainsKey(url))
+                                {
+                                    _method_list[url](req, res);
+                                }
+                                else if (zipmap.ContainsKey(url))
+                                {
+                                    String extension = url.SubString(url.Length - 4, 4).ToUpper().ToString();
+                                    if (".JS".Equals(extension.Substring(1)))
+                                    {
+                                        res.ContextType = "text/javascript; charset=UTF-8";
+                                    }
+                                    else if (".CSS".Equals(extension))
+                                    {
+                                        res.ContextType = "text/css; charset=UTF-8";
+                                    }
+                                    res.Body = zipmap[url];
                                 }
                                 else if (_rootpath != null)
                                 {
-                                    string filepath = _rootpath + req.Uri.ToString();
+                                    string filepath = _rootpath + url.ToString();
                                     if (File.Exists(filepath))
                                     {
                                         res.ReadFile(filepath);
@@ -111,6 +134,38 @@ namespace PTM.Httpd.Impl
             _rootpath = path;
         }
 
+        public void SetZip(String file)
+        {
+            using (ZipFile zip = new ZipFile(file))
+            {
+                foreach (var z in zip)
+                {
+                    using (var reader = z.OpenReader())
+                    {
+                        int length = (int)reader.Length;
+                        String2 temp = new String2(length);
+                        reader.Read(temp.ToBytes(), 0, length);
+                        String2 f = z.FileName.Replace("\\", "/");
+                        this.zipmap.Add("/" + f, temp);
+                    }
+                }
+            }
+        }
+
+        public String2 GetZipFile(String key)
+        {
+            if (this.zipmap.ContainsKey(key))
+            {
+                return this.zipmap[key];
+            }
+            return null;
+        }
+
+        public void SetDefaultFile(String path)
+        {
+            this._default = path;
+        }
+
         public void SetWebSocket(Func<String2, WebSocketNode> method)
         {
             this._websocket_method_list = method;
@@ -120,6 +175,7 @@ namespace PTM.Httpd.Impl
         {
             socketlist.Remove(socket);
         }
+
         public void Send(int opcode, String2 data)
         {
             socketlist.AsParallel().ForAll(_client =>

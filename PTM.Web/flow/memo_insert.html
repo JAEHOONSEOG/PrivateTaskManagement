@@ -1,0 +1,61 @@
+﻿<!-- Content start -->
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Memo</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="has-success row-space">
+            <form id="formdata">
+				<input type="hidden" id="idx" name="idx">
+                <input type="text" class="form-control" placeholder="Title" name="title">
+                <textarea name="contents" id="memo-contents" style="display:none;"></textarea>
+            </form>
+        </div>
+        <div id="summernote"></div>
+        <script>
+            $(function () {
+                $("#summernote").summernote({
+                    height: $(document).height() - 350,
+                    callbacks: {
+                        onKeydown: function (e) {
+                            ins.page_move = false;
+                        }
+                    }
+                });
+                $(document).on("keydown", "input, textarea", function () {
+                    ins.page_move = false;
+                });
+                $(document).on("click", "#btn_save", function () {
+                    $("#memo-contents").val($("#summernote").summernote("code"));
+                    var data = $("#formdata").serialize();
+                    var node = new Node(2, "memo_insert", data);
+                    ins.send(node.toJson());
+
+                });
+				$(document).on("click", "#btn_modify", function() {
+					ins.errorPopup("test");
+				});
+                $(document).on("click", "#btn_cancel", function () {
+                    ins.errorPopup("test");
+                });
+                $.extend(sub, {
+                    memo_insert: function (node) {
+						$("#idx").val(node);
+						$("#btn_save").hide();
+						$("#btn_modify").show();
+                        ins.page_move = true;
+                        ins.successPopup("Saved.");
+                    }
+                });
+            });
+        </script>
+        <div class="pull-right">
+            <button type="button" class="btn btn-success" id="btn_save">Save</button>
+			<button type="button" class="btn btn-success" id="btn_modify">Modify</button>
+            <button type="button" class="btn btn-danger" id="btn_cancel">Cancel</button>
+        </div>
+    </div>
+</div>
+<!-- Content end -->

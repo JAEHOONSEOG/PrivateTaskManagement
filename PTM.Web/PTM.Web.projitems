@@ -12,6 +12,7 @@
     <Content Include="$(MSBuildThisFileDirectory)css\common.css" />
     <Content Include="$(MSBuildThisFileDirectory)css\sb-admin-2.css" />
     <Content Include="$(MSBuildThisFileDirectory)flow\cardmenu.html" />
+    <Content Include="$(MSBuildThisFileDirectory)flow\memo_insert.html" />
     <Content Include="$(MSBuildThisFileDirectory)index.html" />
   </ItemGroup>
   <ItemGroup>

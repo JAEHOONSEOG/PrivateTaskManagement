@@ -51,6 +51,9 @@ namespace PTM.ORM.Common
                             sb.Append(" text ");
                         }
                         break;
+                    case OleDbType.Date:
+                        sb.Append(" datetime ");
+                        break;
                     default:
                         sb.Append(" text ");
                         break;
@@ -171,9 +174,10 @@ namespace PTM.ORM.Common
             {
                 if (scope)
                 {
-                    return this.ExcuteReader(String.Concat(CreateInsertQuery(), ";select scope_identity();"), SetParameter(entity), dr =>
+                    this.ExcuteNonReader(CreateInsertQuery(), SetParameter(entity));
+                    return this.ExcuteReader("select @@identity", null, dr =>
                     {
-                        return Convert.ToInt32(dr.GetDecimal(0));
+                        return dr.GetInt32(0);
                     });
                 }
                 else

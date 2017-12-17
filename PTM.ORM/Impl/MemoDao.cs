@@ -7,28 +7,33 @@ using PTM.ORM.Common;
 
 namespace PTM.ORM.Impl
 {
-    class TestDao : Dao<Test>, ITestDao
+    class MemoDao : Dao<Memo>, IMemoDao
     {
-        public TestDao(Database db) : base(db.GetConnetcion())
+        public MemoDao(Database db) : base(db.GetConnetcion())
         {
             
         }
-        public int Delete(Test entity)
+        public int Delete(Memo entity)
         {
             return base.DeleteByEntity(entity);
         }
 
-        public int Insert(Test entity)
+        public int Insert(Memo entity)
         {
             return base.InsertByEntity(entity);
         }
 
-        public IList<Test> Select()
+        public int InsertAndScope(Memo entity)
+        {
+            return base.InsertByEntity(entity, true);
+        }
+
+        public IList<Memo> Select()
         {
             return base.SelectAll();
         }
 
-        public int Update(Test entity)
+        public int Update(Memo entity)
         {
             return base.UpdateByEntity(entity);
         }
