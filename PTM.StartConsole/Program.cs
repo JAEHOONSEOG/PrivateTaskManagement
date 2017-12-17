@@ -8,6 +8,7 @@ using PTM.ORM.Dao;
 using PTM.ORM.Entity;
 using PTM.WindowForm;
 using PTM.Httpd.Util;
+using Newtonsoft.Json;
 
 namespace PTM.StartConsole
 {
@@ -15,31 +16,10 @@ namespace PTM.StartConsole
     {
         public Program()
         {
-            Database();
+            ORMFactory.Initialize();
+
             WebServer();
             WindowForm();
-        }
-        private void Database()
-        {
-            ITestDao dao = ORMFactory.GetService<ITestDao>(typeof(ITestDao));
-            Test test = new Test();
-            test.Data = "hello world";
-            dao.Insert(test);
-            IList<Test> result = dao.Select();
-            foreach (var t in result)
-            {
-                Console.WriteLine("idx : {0}   data: {1}", t.Idx, t.Data);
-            }
-            test.Data = "test";
-            dao.Update(test);
-            result = dao.Select();
-            foreach (var t in result)
-            {
-                Console.WriteLine("idx : {0}   data: {1}", t.Idx, t.Data);
-            }
-            dao.Delete(test);
-            result = dao.Select();
-            Console.WriteLine("Count: " + result.Count);
         }
         private void WebServer()
         {
@@ -55,7 +35,7 @@ namespace PTM.StartConsole
             });
             server.SetWebSocket(mes =>
             {
-                Console.WriteLine(mes);
+                //Console.WriteLine(mes);
                 WSNode node = WSNode.ToNode(mes.ToString());
                 if (node.Type == 1)
                 {
@@ -72,12 +52,42 @@ namespace PTM.StartConsole
                 {
                     if ("memo_insert".Equals(node.Key))
                     {
-                        Console.WriteLine(node.Data);
-                        node.Data = null;
+                        IMemoDao dao = ORMFactory.GetService<IMemoDao>(typeof(IMemoDao));
+                        String temp = node.Data;
+                        Memo memo = new Memo();
+                        var map = GetParameter(node.Data);
+                        memo.Title = map.ContainsKey("title") ? map["title"] : "No title";
+                        memo.Contents = map.ContainsKey("contents") ? map["contents"] : "";
+                        memo.RecentlyDate = DateTime.Now;
+                        int scope = dao.InsertAndScope(memo);
+                        node.Data = scope.ToString();
                     }
                 }
                 return new WebSocketNode() { OPCode = Opcode.BINARY, Message = node.ToString2() };
             });
+        }
+        private Dictionary<String, String> GetParameter(String data)
+        {
+            Dictionary<String, String> ret = new Dictionary<string, string>();
+            foreach (var b in data.Split('&'))
+            {
+                int pos = b.IndexOf("=");
+                if (pos < 0)
+                {
+                    continue;
+                }
+                String key = b.Substring(0, pos);
+                String value = b.Substring(pos + 1, b.Length - (pos + 1));
+                if (ret.ContainsKey(key))
+                {
+                    ret[key] = value;
+                }
+                else
+                {
+                    ret.Add(key, value);
+                }
+            }
+            return ret;
         }
         private String2 ReadFile(String path)
         {
