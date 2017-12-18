@@ -11,7 +11,7 @@ namespace PTM.ORM.Impl
     {
         public MemoDao(Database db) : base(db.GetConnetcion())
         {
-            
+
         }
         public int Delete(Memo entity)
         {
@@ -36,6 +36,31 @@ namespace PTM.ORM.Impl
         public int Update(Memo entity)
         {
             return base.UpdateByEntity(entity);
+        }
+
+        public Memo GetEneity(int idx)
+        {
+            return base.Transaction(() =>
+            {
+                Memo ret = null;
+                Console.WriteLine(idx);
+                this.ExcuteReader("select idx,title,contents,recentlydate from PTMMemo where idx=@idx", new List<OleDbParameter>()
+                {
+                    CreateParameter("@idx",idx,OleDbType.Integer)
+                },
+                (dr) =>
+                {
+                    if (dr.Read())
+                    {
+                        ret = new Memo();
+                        ret.Idx = dr.GetInt32(0);
+                        ret.Title = dr.GetString(1);
+                        ret.Contents = dr.GetString(2);
+                        ret.RecentlyDate = dr.GetDateTime(3);
+                    }
+                });
+                return ret;
+            });
         }
     }
 }

@@ -24,6 +24,8 @@ namespace PTM.StartConsole
         {
             string path = Path.GetDirectoryName(Application.ExecutablePath);
             var server = ServerFactory.NewInstance(9999);
+            var flow = new Flow();
+            var message = new Message();
             server.SetDefaultFile("index.html");
             server.SetZip(path + "\\html.data");
             //server.SetRootPath(webpath);
@@ -35,62 +37,20 @@ namespace PTM.StartConsole
             });*/
             server.SetWebSocket(mes =>
             {
-                //Console.WriteLine(mes);
+                Console.WriteLine(mes);
                 WSNode node = WSNode.ToNode(mes.ToString());
                 if (node.Type == 1)
                 {
-                    if ("cardmenu".Equals(node.Key))
-                    {
-                        node.Data = server.GetZipFile(@"/flow/cardmenu.html").ToString();
-                        //node.Data = ReadFile(webpath + @"\flow\cardmenu.html").ToString();
-                    }
-                    else if ("memolist".Equals(node.Key))
-                    {
-                        node.Data = server.GetZipFile(@"/flow/memo_insert.html").ToString();
-                        //node.Data = ReadFile(webpath + @"\flow\memo_insert.html").ToString();
-                    }
+                    flow.Execute(node.Key, node);
                 }
                 else if (node.Type == 2)
                 {
-                    if ("memo_insert".Equals(node.Key))
-                    {
-                        IMemoDao dao = ORMFactory.GetService<IMemoDao>(typeof(IMemoDao));
-                        String temp = node.Data;
-                        Memo memo = new Memo();
-                        var map = GetParameter(node.Data);
-                        memo.Title = map.ContainsKey("title") ? map["title"] : "No title";
-                        memo.Contents = map.ContainsKey("contents") ? map["contents"] : "";
-                        memo.RecentlyDate = DateTime.Now;
-                        int scope = dao.InsertAndScope(memo);
-                        node.Data = scope.ToString();
-                    }
+                    message.Execute(node.Key, node);
                 }
                 return new WebSocketNode() { OPCode = Opcode.BINARY, Message = node.ToString2() };
             });
         }
-        private Dictionary<String, String> GetParameter(String data)
-        {
-            Dictionary<String, String> ret = new Dictionary<string, string>();
-            foreach (var b in data.Split('&'))
-            {
-                int pos = b.IndexOf("=");
-                if (pos < 0)
-                {
-                    continue;
-                }
-                String key = b.Substring(0, pos);
-                String value = b.Substring(pos + 1, b.Length - (pos + 1));
-                if (ret.ContainsKey(key))
-                {
-                    ret[key] = value;
-                }
-                else
-                {
-                    ret.Add(key, value);
-                }
-            }
-            return ret;
-        }
+
         private String2 ReadFile(String path)
         {
             FileInfo info = new FileInfo(path);

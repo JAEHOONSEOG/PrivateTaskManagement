@@ -8,21 +8,17 @@
     <div class="col-lg-12">
         <div class="has-success row-space">
             <form id="formdata">
-				<input type="hidden" id="idx" name="idx" class="memo-insert">
-                <input type="text" class="form-control memo-insert" placeholder="Title" name="title">
+				<input type="hidden" id="memo_idx" name="idx" class="memo-insert">
+                <input type="text" class="form-control memo-insert" placeholder="Title" name="title" id="memo_title">
                 <textarea name="contents" id="memo-contents" class="memo-insert" style="display:none;"></textarea>
             </form>
         </div>
-        <div id="summernote"></div>
-        <script>
-            $(function () {
-                
-            });
-        </script>
+        <div class="memo-insert" id="summernote"></div>
         <div class="pull-right">
+            <button type="button" class="btn btn-info memo-insert" id="btn_menu">Memu</button>
             <button type="button" class="btn btn-success memo-insert" id="btn_save">Save</button>
 			<button type="button" class="btn btn-success memo-insert" id="btn_modify">Modify</button>
-            <button type="button" class="btn btn-danger memo-insert" id="btn_cancel">Cancel</button>
+            <button type="button" class="btn btn-danger memo-insert" id="btn_delete">Delete</button>
         </div>
     </div>
 </div>
