@@ -18,13 +18,39 @@ namespace PTM.StartConsole
             Add("set_memo_insert", SetMemoInsert);
             Add("get_memo_list", GetMemoList);
             Add("get_memo_item", GetMemoItem);
+            Add("excute_memo_delete", ExcuteMemoDelete);
+            Add("set_memo_modify", SetMemoModify);
         }
+
         private void Error(WSNode node)
         {
             node.Key = "error";
             node.Data = "Not exists key.";
             node.Type = -1;
         }
+
+        private void SetMemoModify(WSNode node)
+        {
+            IMemoDao dao = ORMFactory.GetService<IMemoDao>(typeof(IMemoDao));
+            String temp = node.Data;
+            Memo memo = new Memo();
+            var map = GetParameter(node.Data);
+            memo.Idx = Convert.ToInt32(map["idx"]);
+            memo = dao.GetEneity(memo.Idx);
+            memo.Title = map.ContainsKey("title") && !String.IsNullOrEmpty(map["title"].Trim()) ? map["title"] : "No title";
+            memo.Contents = map.ContainsKey("contents") && !String.IsNullOrEmpty(map["contents"].Trim()) ? map["contents"] : "";
+            memo.RecentlyDate = DateTime.Now;
+            dao.Update(memo);
+        }
+
+        private void ExcuteMemoDelete(WSNode node)
+        {
+            IMemoDao dao = ORMFactory.GetService<IMemoDao>(typeof(IMemoDao));
+            int idx = Convert.ToInt32(node.Data);
+            var entity = dao.GetEneity(idx);
+            dao.Delete(entity);
+        }
+
         private void GetMemoList(WSNode node)
         {
             IMemoDao dao = ORMFactory.GetService<IMemoDao>(typeof(IMemoDao));
@@ -36,6 +62,7 @@ namespace PTM.StartConsole
             string json = JsonConvert.SerializeObject(list);
             node.Data = json;
         }
+
         private void SetMemoInsert(WSNode node)
         {
             IMemoDao dao = ORMFactory.GetService<IMemoDao>(typeof(IMemoDao));
@@ -48,6 +75,7 @@ namespace PTM.StartConsole
             int scope = dao.InsertAndScope(memo);
             node.Data = scope.ToString();
         }
+
         private void GetMemoItem(WSNode node)
         {
             int idx;
@@ -55,21 +83,16 @@ namespace PTM.StartConsole
             {
                 idx = Convert.ToInt32(node.Data);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Error(node);
                 return;
             }
             IMemoDao dao = ORMFactory.GetService<IMemoDao>(typeof(IMemoDao));
-            //TODO: We can not where?
-            //var item = dao.GetEneity(idx);
-            var list = dao.Select();
-            var item = list.Where((m) =>
-            {
-                return m.Idx == idx;
-            }).FirstOrDefault();
+            var item = dao.GetEneity(idx);
             node.Data = JsonConvert.SerializeObject(item);
         }
+
         public void Execute(String key, WSNode node)
         {
             if (base.ContainsKey(key))
@@ -79,6 +102,7 @@ namespace PTM.StartConsole
             }
             Error(node);
         }
+
         private Dictionary<String, String> GetParameter(String data)
         {
             Dictionary<String, String> ret = new Dictionary<string, string>();

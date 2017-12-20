@@ -43,7 +43,7 @@ var ins = (function (obj) {
         };
         $(window).on("beforeunload", function (e) {
             if (!ins.page_move) {
-                var e = e || window.event;
+                e = e || window.event;
                 if (e) {
                     e.returnValue = ins.beforeunload_msg;
                 }
@@ -54,7 +54,7 @@ var ins = (function (obj) {
     message: function (ws, message) {
         var temp = JSON.parse(message.data);
         ins.callMethod(navi, temp.Key, temp);
-        if (temp.Type == 1 && temp.ResponseKey !== undefined && temp.ResponseKey !== null) {
+        if (temp.Type === 1 && temp.ResponseKey !== undefined && temp.ResponseKey !== null) {
             var node = new Node(2, temp.ResponseKey, temp.ResponseData);
             ins.send(node.toJson());
         }
@@ -105,6 +105,9 @@ var ins = (function (obj) {
 
 var navi = {
     init: function () {
+        $(document).on("click", "#Home", function () {
+            ins.loadPage("cardmenu");
+        });
         $(document).on("click", "#CalendarPanel,#CalendarMenu", function () {
             ins.loadPage("cardmenu");
         });
@@ -147,12 +150,11 @@ var navi = {
         for (var i = 0; i < list.length; i++) {
             var button = $("<button></button>").addClass("list-group-item").addClass("memo-list-item").val(list[i].Idx);
             button.append(list[i].Title);
-            button.append($("<span></span>").addClass("badge").append(list[i].RecentlyDate))
+            button.append($("<span></span>").addClass("badge").append(list[i].RecentlyDate));
             $(".memo-list#list").append(button);
         }
     },
     set_memo_insert: function (node) {
-        console.log(node);
         $(".memo-insert#memo_idx").val(node.Data);
         $(".memo-insert#btn_save").hide();
         $(".memo-insert#btn_modify").show();
@@ -168,6 +170,14 @@ var navi = {
         $(".memo-insert#btn_modify").show();
         $(".memo-insert#btn_delete").show();
         $(".memo-insert#summernote").summernote("code",decodeURIComponent(temp.Contents));
+    },
+    excute_memo_delete: function (node) {
+        ins.successPopup("Deleted.");
+        ins.loadPage("memolist");
+    },
+    set_memo_modify: function (node) {
+        ins.page_move = true;
+        ins.successPopup("Modified.");
     },
     error: function (node) {
         ins.errorPopup(node.Data);
@@ -208,10 +218,14 @@ var menu_insert = (function (obj) {
             ins.loadPage("memolist");
         });
         $(document).on("click", ".memo-insert#btn_modify", function () {
-            ins.errorPopup("test");
+            $("#memo-contents").val($("#summernote").summernote("code"));
+            var data = $("#formdata").serialize();
+            var node = new Node(2, "set_memo_modify", data);
+            ins.send(node.toJson());
         });
         $(document).on("click", ".memo-insert#btn_delete", function () {
-            ins.errorPopup("test");
+            var node = new Node(2, "excute_memo_delete", $("#memo_idx").val());
+            ins.send(node.toJson());
         });
     }
 });
