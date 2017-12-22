@@ -37,9 +37,11 @@ var ins = (function (obj) {
         };
         ws.onmessage = function (message) {
             ins.message(ws, message);
+            $(".loading").hide();
         };
         ins.send = function (message) {
             ws.send(message);
+            $(".loading").show();
         };
         $(window).on("beforeunload", function (e) {
             if (!ins.page_move) {
@@ -118,7 +120,7 @@ var navi = {
             ins.loadPage("memolist");
         });
         $(document).on("click", "#SettingsPanel,#SettingsMenu", function () {
-            ins.loadPage("cardmenu");
+            ins.loadPage("setting");
         });
         ins.loadPage("cardmenu");
     },
@@ -143,6 +145,9 @@ var navi = {
                 }
             }
         });
+    },
+    setting: function (node) {
+        ins.loadContents(node.Data);
     },
     get_memo_list: function (node) {
         var list = Node.prototype.toObject(node.Data);

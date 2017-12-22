@@ -14,12 +14,17 @@ namespace PTM.StartConsole
             Add("cardmenu", CardMenu);
             Add("memolist", MemoList);
             Add("memoinsert", MemoInsert);
+            Add("setting", Setting);
         }
         private void Error(WSNode node)
         {
             node.Key = "error";
             node.Data = "Not exists key.";
             node.Type = -1;
+        }
+        private void Setting(WSNode node)
+        {
+            node.Data = ServerFactory.GetInstance().GetZipFile(@"/flow/setting.html").ToString();
         }
         private void MemoInsert(WSNode node)
         {
