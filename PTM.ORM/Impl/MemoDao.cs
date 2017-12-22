@@ -4,6 +4,7 @@ using System.Data.OleDb;
 using PTM.ORM.Dao;
 using PTM.ORM.Entity;
 using PTM.ORM.Common;
+using System.Linq;
 
 namespace PTM.ORM.Impl
 {
@@ -11,7 +12,7 @@ namespace PTM.ORM.Impl
     {
         public MemoDao(Database db) : base(db.GetConnetcion())
         {
-            
+
         }
         public int Delete(Memo entity)
         {
@@ -36,6 +37,14 @@ namespace PTM.ORM.Impl
         public int Update(Memo entity)
         {
             return base.UpdateByEntity(entity);
+        }
+
+        public Memo GetEneity(int idx)
+        {
+            return Select().Where((m) =>
+            {
+                return m.Idx == idx;
+            }).FirstOrDefault();
         }
     }
 }

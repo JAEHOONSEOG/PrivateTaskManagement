@@ -19,5 +19,7 @@ namespace PTM.ORM.Dao
         int Update(Memo entity);
 
         int Delete(Memo entity);
+
+        Memo GetEneity(int idx);
     }
 }

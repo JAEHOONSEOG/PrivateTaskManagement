@@ -28,49 +28,7 @@
     <script src="./js/common.js"></script>
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
-    <title></title>
-    <script>
-        var sub = {
-            init: function () {
-                $(document).on("click", "#CalendarPanel,#CalendarMenu", function () {
-                    ins.loadPage("cardmenu");
-                });
-                $(document).on("click", "#TaskPanel,#TaskMenu", function () {
-                    ins.loadPage("cardmenu");
-                });
-                $(document).on("click", "#MemoPanel,#MemoMenu", function () {
-                    ins.loadPage("memolist");
-                });
-                $(document).on("click", "#SettingsPanel,#SettingsMenu", function () {
-                    ins.loadPage("cardmenu");
-                });
-                ins.loadPage("cardmenu");
-            },
-            cardmenu: function (node) {
-                ins.loadContents(node.Data);
-            },
-            memolist: function (node) {
-                ins.loadContents(node.Data);
-                //
-                $("#btn_modify").hide();
-                $("#summernote").summernote({
-                    height: $(document).height() - 350,
-                    callbacks: {
-                        onKeydown: function (e) {
-                            ins.page_move = false;
-                        }
-                    }
-                });
-            },
-            memo_insert: function (node) {
-                $("#idx").val(node);
-                $("#btn_save").hide();
-                $("#btn_modify").show();
-                ins.page_move = true;
-                ins.successPopup("Saved.");
-            }
-        };
-    </script>
+    <title>PrivateTaskManagement</title>
 </head>
 <body>
     <div id="wrapper">
@@ -82,6 +40,9 @@
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav">
                     <ul class="nav" id="side-menu">
+                        <li>
+                            <a id="Home"><i class="fa fa-home fa-fw"></i></a>
+                        </li>
                         <li>
                             <a id="CalendarMenu"><i class="fa fa-calendar fa-fw"></i></a>
                         </li>

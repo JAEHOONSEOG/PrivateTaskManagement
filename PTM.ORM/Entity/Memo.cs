@@ -5,7 +5,7 @@ using PTM.ORM.Common;
 
 namespace PTM.ORM.Entity
 {
-    [Table("Test")]
+    [Table("PTMMemo")]
     public sealed class Memo : IEntity
     {
         [Column("idx", OleDbType.Integer, Key = true, Identity = true)]
@@ -13,6 +13,7 @@ namespace PTM.ORM.Entity
 
         public int Idx
         {
+            set { this.idx = value; }
             get { return this.idx; }
         }
 
