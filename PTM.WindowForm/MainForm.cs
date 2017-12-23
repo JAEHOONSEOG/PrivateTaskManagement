@@ -16,6 +16,7 @@ namespace PTM.WindowForm
         public MainForm()
         {
             this.SuspendLayout();
+            this.WindowState = FormWindowState.Maximized;
             this.Controls.Add(browser = new WebBrowser());
             this.ResumeLayout(false);
         }

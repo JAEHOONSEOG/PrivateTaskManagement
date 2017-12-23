@@ -13,6 +13,8 @@ namespace PTM.StartConsole
         public int Type { get; set; }
         public String Key { get; set; }
         public String Data { get; set; }
+        public String ResponseKey { get; set; }
+        public String ResponseData { get; set; }
         public static WSNode ToNode(String json)
         {
             return JsonConvert.DeserializeObject<WSNode>(json);
