@@ -19,11 +19,10 @@ namespace PTM.StartConsole
         private IContainer components;
         public MainContext()
         {
-            //Application.Run(new MainForm());
             ORMFactory.Initialize();
             this.components = new Container();
             this.notify = new NotifyIcon(this.components);
-            this.notify.Icon = new Icon("favicon.ico");
+            this.notify.Icon = new Icon(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "favicon.ico"));
             this.notify.Visible = true;
             this.notify.ContextMenu = new ContextMenu();
             this.notify.ContextMenu.MenuItems.AddRange(SetMenuItem());
@@ -31,10 +30,16 @@ namespace PTM.StartConsole
             this.notify.Text = "Private Task Management";
             ThreadPool.QueueUserWorkItem(c =>
             {
+                int port = 9999;
+                try
+                {
+                    port = Convert.ToInt32(ConfigSystem.GetSettingPort());
+                }
+                catch { }
                 string path = Path.GetDirectoryName(Application.ExecutablePath);
-                var server = ServerFactory.NewInstance(9999);
+                var server = ServerFactory.NewInstance(port);
                 var flow = new Flow();
-                var message = new Message();
+                var message = new Message(this);
                 server.SetDefaultFile("index.html");
                 server.SetZip(path + "\\html.data");
                 //server.SetRootPath(webpath);
@@ -44,6 +49,16 @@ namespace PTM.StartConsole
                     //req.SetSession("aaaaa", "asdfasfd");
                     req.ReadFile(webpath + @"\index.html");
                 });*/
+                server.Set("/js/define.js", (res, req) =>
+                {
+                    req.ContextType = "text / javascript; charset = UTF - 8";
+                    req.Body = "var wsurl = \"ws://localhost:" + Convert.ToInt32(ConfigSystem.GetSettingPort()) + "/menu\";";
+                });
+                server.Set("/Start", (res, req) =>
+                {
+                    ShowForm();
+                    req.StateOK();
+                });
                 server.SetWebSocket(mes =>
                 {
                     Console.WriteLine(mes);
@@ -59,6 +74,20 @@ namespace PTM.StartConsole
                     return new WebSocketNode() { OPCode = Opcode.BINARY, Message = node.ToString2() };
                 });
             });
+            if (String.Equals(ConfigSystem.GetWindowStart(), "on"))
+            {
+                ShowForm();
+            }
+        }
+
+        private void ShowForm()
+        {
+            if (this.MainForm == null)
+            {
+                this.MainForm = new MainForm(ConfigSystem.GetSettingPort());
+                (this.MainForm as MainForm).SetSize(ConfigSystem.GetWIndowSize());
+            }
+            (this.MainForm as MainForm).Booting();
         }
 
         private MenuItem[] SetMenuItem()
@@ -73,16 +102,12 @@ namespace PTM.StartConsole
                 {
                     if (String.Equals("Window", (s as MenuItem).Text))
                     {
-                        if (this.MainForm == null)
-                        {
-                            this.MainForm = new MainForm();
-                        }
-                        (this.MainForm as MainForm).Booting();
+                        ShowForm();
                     }
                     if (String.Equals("Exit", (s as MenuItem).Text))
                     {
                         this.notify.Visible = false;
-                        if(this.MainForm != null)
+                        if (this.MainForm != null)
                         {
                             (this.MainForm as MainForm).Exit();
                         }

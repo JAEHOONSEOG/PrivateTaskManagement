@@ -25,7 +25,7 @@ var ins = (function (obj) {
     + "You have started writing or editing a post.\n"
     + "Press OK to continue or Cancel to stay on the current page.",
     onLoad: function () {
-        var ws = new WebSocket("ws://localhost:9999/menu");
+        var ws = new WebSocket(wsurl);
         ws.onopen = function () {
             ins.callMethod(navi, "init");
         };
@@ -148,6 +148,8 @@ var navi = {
     },
     setting: function (node) {
         ins.loadContents(node.Data);
+        var temp = new Node(2, "get_setting");
+        ins.send(temp.toJson());
     },
     get_memo_list: function (node) {
         var list = Node.prototype.toObject(node.Data);
@@ -183,6 +185,19 @@ var navi = {
     set_memo_modify: function (node) {
         ins.page_move = true;
         ins.successPopup("Modified.");
+    },
+    get_setting: function (node) {
+        var obj = Node.prototype.toObject(node.Data);
+        $(".setting#port").val(obj.Port);
+        $(".setting#size").val(obj.Size);
+        if (obj.Start === "on") {
+            $(".setting#start")[0].checked = true;
+        } else {
+            $(".setting#start")[1].checked = true;
+        }
+    },
+    set_setting: function (node) {
+        ins.successPopup("Saved.");
     },
     error: function (node) {
         ins.errorPopup(node.Data);
@@ -230,6 +245,25 @@ var menu_insert = (function (obj) {
         });
         $(document).on("click", ".memo-insert#btn_delete", function () {
             var node = new Node(2, "excute_memo_delete", $("#memo_idx").val());
+            ins.send(node.toJson());
+        });
+    }
+});
+
+var setting = (function (obj) {
+    $(obj.onLoad);
+    return obj;
+})({
+    onLoad: function () {
+        $(document).on("click", ".setting#btn_save", function () {
+            
+            var data = {
+                Port: $(".setting#port").val(),
+                Size: $(".setting#size").val(),
+                Start: $(".setting#start")[0].checked ? $(".setting#start")[0].value : $(".setting#start")[1].value
+            }
+            var json = JSON.stringify(data);
+            var node = new Node(2, "set_setting", json);
             ins.send(node.toJson());
         });
     }

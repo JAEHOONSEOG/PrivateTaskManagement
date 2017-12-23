@@ -1,14 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Collections.Generic;
-using System.IO;
-using PTM.Httpd;
-using PTM.ORM;
-using PTM.ORM.Dao;
-using PTM.ORM.Entity;
-using PTM.WindowForm;
-using PTM.Httpd.Util;
-using Newtonsoft.Json;
+using System.Threading;
+using System.Net;
 
 namespace PTM.StartConsole
 {
@@ -17,6 +10,22 @@ namespace PTM.StartConsole
         [STAThread]
         static void Main(string[] args)
         {
+            string mtxName = "PrivateTaskManager";
+            Mutex mtx = new Mutex(true, mtxName);
+
+            TimeSpan tsWait = new TimeSpan(0, 0, 1);
+            bool success = mtx.WaitOne(tsWait);
+
+            if (!success)
+            {
+                String port = ConfigSystem.GetSettingPort();
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:" + port + "/Start");
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                {
+                    Console.WriteLine(response.StatusCode);
+                }
+                return;
+            }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainContext());

@@ -8,18 +8,23 @@ using PTM.ORM;
 using PTM.ORM.Dao;
 using PTM.ORM.Entity;
 using Newtonsoft.Json;
+using PTM.WindowForm;
 
 namespace PTM.StartConsole
 {
     class Message : Dictionary<String, Action<WSNode>>
     {
-        public Message()
+        private MainContext context;
+        public Message(MainContext context)
         {
+            this.context = context;
             Add("set_memo_insert", SetMemoInsert);
             Add("get_memo_list", GetMemoList);
             Add("get_memo_item", GetMemoItem);
             Add("excute_memo_delete", ExcuteMemoDelete);
             Add("set_memo_modify", SetMemoModify);
+            Add("get_setting", GetSetting);
+            Add("set_setting", SetSetting);
         }
 
         private void Error(WSNode node)
@@ -27,6 +32,32 @@ namespace PTM.StartConsole
             node.Key = "error";
             node.Data = "Not exists key.";
             node.Type = -1;
+        }
+
+        private void SetSetting(WSNode node)
+        {
+            var data = JsonConvert.DeserializeObject<Dictionary<String, String>>(node.Data);
+            foreach(var n in data)
+            {
+                ConfigSystem.WriteConfig("Config", "Setting", n.Key, n.Value);
+            }
+            if(this.context.MainForm!= null)
+            {
+                (this.context.MainForm as MainForm).SetSize(ConfigSystem.GetWIndowSize());
+            }
+        }
+
+        private void GetSetting(WSNode node)
+        {
+            var obj = new
+            {
+                Port = ConfigSystem.GetSettingPort(),
+                Size = ConfigSystem.GetWIndowSize(),
+                Start = ConfigSystem.GetWindowStart()
+            };
+
+            String json = JsonConvert.SerializeObject(obj);
+            node.Data = json;
         }
 
         private void SetMemoModify(WSNode node)

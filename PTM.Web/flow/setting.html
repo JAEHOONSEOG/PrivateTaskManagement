@@ -19,13 +19,13 @@
             <li class="list-group-item">
                 <div class="input-group">
                     <span class="input-group-addon">System Network Port</span>
-                    <input id="email" type="text" class="form-control" name="port" placeholder="Port">
+                    <input type="text" class="form-control setting" name="port" id="port" placeholder="Port">
                 </div>
             </li>
             <li class="list-group-item">
                 <div class="input-group">
                     <span class="input-group-addon">Window size</span>
-                    <select class="form-control">
+                    <select class="form-control setting" name="size" id="size">
                         <option value="full">full screen</option>
                         <option value="1366*768">1366*768</option>
                         <option value="1360*768">1360*768</option>
@@ -41,8 +41,8 @@
                 <div class="input-group">
                     <span class="input-group-addon">When the system start, booting window.</span>
                     <div class="form-control">
-                        <label class="radio-inline"><input type="radio" name="optradio">Option 1</label>
-                        <label class="radio-inline"><input type="radio" name="optradio">Option 2</label>
+                        <label class="radio-inline"><input type="radio" name="start" id="start" class="setting" value="on">On</label>
+                        <label class="radio-inline"><input type="radio" name="start" id="start" class="setting" value="off">Off</label>
                     </div>
                 </div>
             </li>
@@ -52,7 +52,7 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="pull-right">
-            <button type="button" class="btn btn-success" id="btn_save">Save</button>
+            <button type="button" class="btn btn-success setting" id="btn_save">Save</button>
         </div>
     </div>
 </div>
