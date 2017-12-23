@@ -11,7 +11,7 @@ namespace PTM.WindowForm
 {
     class WebBrowser : GeckoWebBrowser
     {
-        public WebBrowser()
+        public WebBrowser(String port)
         {
             Xpcom.EnableProfileMonitoring = false;
             var app_dir = Path.GetDirectoryName(Application.ExecutablePath);
@@ -21,7 +21,7 @@ namespace PTM.WindowForm
             FrameEventsPropagateToMainWindow = false;
             TabIndex = 0;
             UseHttpActivityObserver = false;
-            Navigate("http://localhost:9999");
+            Navigate("http://localhost:" + port);
         }
     }
 }
