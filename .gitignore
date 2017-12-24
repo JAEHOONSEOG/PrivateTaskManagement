@@ -1,7 +1,11 @@
 .vs
 /bin
 /PTM.Httpd/obj
+/PTM.Httpd/bin
 /PTM.ORM/obj
+/PTM.ORM/bin
 /PTM.StartConsole/obj
+/PTM.StartConsole/bin
 /PTM.WindowForm/obj
+/PTM.WindowForm/bin
 /packages
