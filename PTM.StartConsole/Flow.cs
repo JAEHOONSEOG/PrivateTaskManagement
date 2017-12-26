@@ -15,12 +15,17 @@ namespace PTM.StartConsole
             Add("memolist", MemoList);
             Add("memoinsert", MemoInsert);
             Add("setting", Setting);
+            Add("task", _Task);
         }
         private void Error(WSNode node)
         {
             node.Key = "error";
             node.Data = "Not exists key.";
             node.Type = -1;
+        }
+        private void _Task(WSNode node)
+        {
+            node.Data = ServerFactory.GetInstance().GetZipFile(@"/flow/task.html").ToString();
         }
         private void Setting(WSNode node)
         {

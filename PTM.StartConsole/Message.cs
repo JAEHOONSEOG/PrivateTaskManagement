@@ -22,6 +22,8 @@ namespace PTM.StartConsole
             Add("set_memo_modify", SetMemoModify);
             Add("get_setting", GetSetting);
             Add("set_setting", SetSetting);
+            Add("set_task_insert", SetTaskInsert);
+            Add("get_task_list", GetTaskList);
         }
 
         private void Error(WSNode node)
@@ -31,14 +33,52 @@ namespace PTM.StartConsole
             node.Type = -1;
         }
 
+        private void GetTaskList(WSNode node)
+        {
+            ITaskDao dao = ORMFactory.GetService<ITaskDao>(typeof(ITaskDao));
+            var list = dao.Select();
+            string json = JsonConvert.SerializeObject(list);
+            node.Data = json;
+        }
+
+        private void SetTaskInsert(WSNode node)
+        {
+            ITaskDao dao = ORMFactory.GetService<ITaskDao>(typeof(ITaskDao));
+            String temp = node.Data;
+            Task task = new Task();
+            var map = GetParameter(node.Data);
+            if (!map.ContainsKey("title"))
+            {
+                Error(node);
+                node.Data = "Title is nothing.";
+                return;
+            }
+            task.Title = map["title"];
+            task.Contents = map.ContainsKey("contents") && !String.IsNullOrEmpty(map["contents"].Trim()) ? map["contents"] : "";
+            try
+            {
+                task.Importance = map.ContainsKey("importance") && !String.IsNullOrEmpty(map["importance"].Trim()) ? Convert.ToInt32(map["importance"]) : 2;
+            }
+            catch
+            {
+                task.Importance = 2;
+            }
+            task.Tasktype = 0;
+            task.Taskdate = DateTime.Now;
+            task.IsDelete = 0;
+            int scope = dao.InsertAndScope(task);
+            task.Idx = scope;
+            node.Data = JsonConvert.SerializeObject(task);
+        }
+
         private void SetSetting(WSNode node)
         {
             var data = JsonConvert.DeserializeObject<Dictionary<String, String>>(node.Data);
-            foreach(var n in data)
+            foreach (var n in data)
             {
                 ConfigSystem.WriteConfig("Config", "Setting", n.Key, n.Value);
             }
-            if(this.context.MainForm!= null)
+            if (this.context.MainForm != null)
             {
                 (this.context.MainForm as MainForm).SetSize(ConfigSystem.GetWIndowSize());
             }

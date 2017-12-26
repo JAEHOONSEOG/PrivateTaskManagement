@@ -10,7 +10,6 @@ namespace PTM.ORM.Entity
     {
         [Column("idx", OleDbType.Integer, Key = true, Identity = true)]
         private int idx;
-
         public int Idx
         {
             set { this.idx = value; }
@@ -19,15 +18,14 @@ namespace PTM.ORM.Entity
 
         [Column("title", OleDbType.VarChar, ColumnSize = 255)]
         private String title;
-
         public String Title
         {
             get { return this.title; }
             set { this.title = value; }
         }
+
         [Column("contents", OleDbType.VarChar)]
         private String contents;
-
         public String Contents
         {
             get { return this.contents; }
