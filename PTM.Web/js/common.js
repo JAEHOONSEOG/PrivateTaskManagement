@@ -573,10 +573,11 @@ var task = (function (obj) {
                     isMove = true;
                     //console.log($(temp).find("input").val());
                 }
+                /*
                 $(this).css("height", "");
                 if (maxsize <= $(this).height()) {
                     maxsize = $(this).height();
-                }
+                }*/
             });
             if (!isMove) {
                 target.css("left", "");
