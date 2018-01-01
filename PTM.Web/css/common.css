@@ -75,7 +75,7 @@ div.message-zone {
     position: absolute;
     top: 0;
     /*background-color: #333;*/
-    background-color:blue;
+    background-color: blue;
     border-radius: 100%;
     -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
     animation: sk-bounce 2.0s infinite ease-in-out;
@@ -125,7 +125,8 @@ div.message-zone {
 /*loading*/
 
 .loading {
-    position: absolute;
+    /*position: absolute;*/
+    position: fixed;
     top: 0px;
     left: 0px;
     margin: 0px;
@@ -223,6 +224,7 @@ div.message-zone {
     min-height: 100px;
     padding: 10px;
     background: white;
+    word-break: break-all;
 }
 
 .task-item.task-active {
@@ -246,4 +248,12 @@ div.message-zone {
 
 .task-item-panel.task-low {
     border-color: #FFFF00;
+}
+
+#pre_date, #next_date {
+    cursor: pointer;
+}
+
+.no-drop {
+    cursor: no-drop;
 }

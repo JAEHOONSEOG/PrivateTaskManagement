@@ -38,5 +38,10 @@ namespace PTM.ORM.Impl
         {
             return base.UpdateByEntity(entity);
         }
+
+        public Task GetEntity(int idx)
+        {
+            return Select().Where(t => { return t.Idx == idx; }).FirstOrDefault();
+        }
     }
 }

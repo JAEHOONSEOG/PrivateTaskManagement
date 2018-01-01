@@ -18,5 +18,7 @@ namespace PTM.ORM.Dao
         int Update(Task entity);
 
         int Delete(Task entity);
+
+        Task GetEntity(int idx);
     }
 }
