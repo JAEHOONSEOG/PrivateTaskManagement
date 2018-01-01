@@ -120,10 +120,10 @@ namespace PTM.ORM.Common
             ret.Value = value;
             return ret;
         }
-        protected IList<OleDbParameter> SetParameter(T entity)
+        protected IList<OleDbParameter> SetParameter(T entity, bool skip_identity = true)
         {
             IList<OleDbParameter> ret = new List<OleDbParameter>();
-            List<FieldInfo> fds = GetFieldsInfo(typeof(T));
+            List<FieldInfo> fds = GetFieldsInfo(typeof(T), skip_identity);
             foreach (FieldInfo fd in fds)
             {
                 Column cn = fd.GetCustomAttribute(typeof(Column)) as Column;
@@ -193,7 +193,7 @@ namespace PTM.ORM.Common
             StringBuilder set = new StringBuilder();
             Type type = typeof(T);
             Table table = type.GetCustomAttribute(typeof(Table)) as Table;
-            IList<FieldInfo> fds = GetFieldsInfo(type);
+            IList<FieldInfo> fds = GetFieldsInfo(type, false);
             foreach (FieldInfo fd in fds)
             {
                 Column cn = fd.GetCustomAttribute(typeof(Column)) as Column;
@@ -208,10 +208,14 @@ namespace PTM.ORM.Common
                     {
                         where.Append(" AND ");
                     }
-                    where = where.Append(" ").Append(cn.ColumnName).Append(" = ").Append(columnName);
+                    where = where.Append(" ").Append(cn.ColumnName).Append("=").Append(columnName);
                 }
                 else
                 {
+                    if (cn.Identity)
+                    {
+                        continue;
+                    }
                     if (set.Length == 0)
                     {
                         set.Append(" SET ");
@@ -220,7 +224,7 @@ namespace PTM.ORM.Common
                     {
                         set.Append(" , ");
                     }
-                    set = set.Append(" ").Append(cn.ColumnName).Append(" = ").Append(columnName);
+                    set = set.Append(" ").Append(cn.ColumnName).Append("=").Append(columnName);
                 }
             }
             sb.Append(" UPDATE ").Append(table.TableName).Append(" ");
@@ -232,7 +236,12 @@ namespace PTM.ORM.Common
         {
             return this.Transaction(() =>
             {
-                return this.ExcuteNonReader(CreateUpdateQuery(), SetParameter(entity));
+                //OLE bug????
+                var para = SetParameter(entity, false);
+                var temp = para[0];
+                para.Remove(temp);
+                para.Add(temp);
+                return this.ExcuteNonReader(CreateUpdateQuery(), para);
             });
         }
         protected String CreateDeleteQuery()
@@ -372,7 +381,7 @@ namespace PTM.ORM.Common
             }
             return ret;
         }
-        private List<FieldInfo> GetFieldsInfo(Type cls)
+        private List<FieldInfo> GetFieldsInfo(Type cls, bool skip_Identity = true)
         {
             List<FieldInfo> ret = new List<FieldInfo>();
             FieldInfo[] pis = cls.GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
@@ -383,7 +392,7 @@ namespace PTM.ORM.Common
                 {
                     continue;
                 }
-                if (c.Identity)
+                if (c.Identity && skip_Identity)
                 {
                     continue;
                 }

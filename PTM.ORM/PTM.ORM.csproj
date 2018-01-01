@@ -45,10 +45,13 @@
     <Compile Include="Attribute\Table.cs" />
     <Compile Include="Common\Dao.cs" />
     <Compile Include="Common\IEntity.cs" />
+    <Compile Include="Dao\ITaskDao.cs" />
     <Compile Include="Dao\IMemoDao.cs" />
     <Compile Include="Entity\Memo.cs" />
     <Compile Include="Common\Database.cs" />
     <Compile Include="Common\IDao.cs" />
+    <Compile Include="Entity\Task.cs" />
+    <Compile Include="Impl\TaskDao.cs" />
     <Compile Include="Impl\MemoDao.cs" />
     <Compile Include="ORMFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

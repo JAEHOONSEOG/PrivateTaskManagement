@@ -36,7 +36,7 @@
     border-color: #23527c;
 }
 
-.panel-heading:hover {
+.menu-tile.panel-heading:hover {
     cursor: pointer;
 }
 
@@ -75,7 +75,7 @@ div.message-zone {
     position: absolute;
     top: 0;
     /*background-color: #333;*/
-    background-color:blue;
+    background-color: blue;
     border-radius: 100%;
     -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
     animation: sk-bounce 2.0s infinite ease-in-out;
@@ -125,7 +125,8 @@ div.message-zone {
 /*loading*/
 
 .loading {
-    position: absolute;
+    /*position: absolute;*/
+    position: fixed;
     top: 0px;
     left: 0px;
     margin: 0px;
@@ -133,4 +134,126 @@ div.message-zone {
     height: 100%;
     z-index: 9999;
     background-color: rgba(255, 255, 255, 0.5);
+}
+
+.task-list {
+    list-style: none;
+}
+
+.task-step {
+    display: inline-block;
+    padding: 0px;
+    width: 19%;
+    float: left;
+    margin-left: 1%;
+}
+
+.task-list {
+    padding: 0px;
+    margin: 0px;
+    margin: 0px;
+    border: 1px solid rgb(221, 221, 221);
+    border-radius: 3px;
+    min-height: 100px;
+}
+
+.task-item {
+    padding: 5px;
+    margin: 0px;
+}
+
+.task-item-panel {
+    border: 1px solid rgb(221, 221, 221);
+    min-height: 100px;
+    padding: 10px;
+    background: white;
+}
+
+.task-item.task-active {
+    background-color: #00ff00;
+}
+
+.panel-tag {
+    padding: 1px;
+    display: inline-block;
+    width: 100px;
+    text-align: center;
+}
+
+.task-item-panel.task-high {
+    border-color: #FF0000;
+}
+
+.task-item-panel.task-middle {
+    border-color: #FF8800;
+}
+
+.task-item-panel.task-low {
+    border-color: #FFFF00;
+}
+
+.task-list {
+    list-style: none;
+}
+
+.task-step {
+    display: inline-block;
+    padding: 0px;
+    width: 19%;
+    float: left;
+    margin-left: 1%;
+}
+
+.task-list {
+    padding: 0px;
+    margin: 0px;
+    margin: 0px;
+    border: 1px solid rgb(221, 221, 221);
+    border-radius: 3px;
+    min-height: 100px;
+}
+
+.task-item {
+    padding: 5px;
+    margin: 0px;
+    cursor: pointer;
+}
+
+.task-item-panel {
+    border: 1px solid rgb(221, 221, 221);
+    min-height: 100px;
+    padding: 10px;
+    background: white;
+    word-break: break-all;
+}
+
+.task-item.task-active {
+    background-color: #00ff00;
+}
+
+.panel-tag {
+    padding: 1px;
+    display: inline-block;
+    width: 100px;
+    text-align: center;
+}
+
+.task-item-panel.task-high {
+    border-color: #FF0000;
+}
+
+.task-item-panel.task-middle {
+    border-color: #FF8800;
+}
+
+.task-item-panel.task-low {
+    border-color: #FFFF00;
+}
+
+#pre_date, #next_date {
+    cursor: pointer;
+}
+
+.no-drop {
+    cursor: no-drop;
 }
