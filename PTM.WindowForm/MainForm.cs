@@ -11,22 +11,34 @@ namespace PTM.WindowForm
     public class MainForm : Form
     {
         private System.ComponentModel.IContainer components = null;
+        private String config_size = "full";
+        private bool isView = false;
         private WebBrowser browser;
-        private ProgressForm progress;
+        private ProgressBar progress;
         private delegate void SetSizeInvoke(String size);
         private delegate void BootingInvoke();
 
         public MainForm(String port)
         {
-            this.progress = new ProgressForm();
             this.SuspendLayout();
             this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            this.Controls.Add(progress = new ProgressBar());
+            this.progress.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.progress.MarqueeAnimationSpeed = 10;
+            this.progress.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Size = new System.Drawing.Size(450, 80);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Controls.Add(browser = new WebBrowser(port));
             browser.DocumentCompleted += Browser_DocumentCompleted;
             this.ResumeLayout(false);
         }
         public void SetSize(String size)
         {
+            config_size = size;
+            if (!this.isView)
+            {
+                return;
+            }
             if (InvokeRequired)
             {
                 SetSizeInvoke invoke = new SetSizeInvoke(SetSizeInline);
@@ -68,39 +80,23 @@ namespace PTM.WindowForm
         }
         private void Browser_DocumentCompleted(object sender, Gecko.Events.GeckoDocumentCompletedEventArgs e)
         {
-            progress.Visible = false;
-            progress.Dispose();
-            this.Visible = true;
+            this.progress.Visible = false;
+            this.isView = true;
+            this.SetSize(this.config_size);
         }
 
         public void Booting()
         {
-            if (InvokeRequired)
-            {
-                BootingInvoke invoke = new BootingInvoke(BootingInline);
-                this.Invoke(invoke);
-            }
-            else
-            {
-                BootingInline();
-            }
-        }
-
-        private void BootingInline()
-        {
-            if (progress.IsDisposed)
-            {
-                this.Visible = true;
-            }
-            else
-            {
-                progress.Visible = true;
-            }
+            //this.Visible = true;
+            this.Show();
+            //this.SetSize(this.config_size);
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             e.Cancel = true;
-            this.Visible = false;
+            //this.WindowState = FormWindowState.Minimized;
+            this.Hide();
+            //this.Visible = false;
             //base.OnFormClosing(e);
         }
         public void Exit()
