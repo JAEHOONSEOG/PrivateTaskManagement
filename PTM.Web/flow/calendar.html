@@ -1,14 +1,72 @@
-﻿<!-- Content start -->
-<div class="row">
-    <div class="col-lg-12">
-        <h1 class="page-header">Memo</h1>
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head> 
+    <link href="./css/fullcalendar.css" rel="stylesheet">
+    <script src="./js/fullcalendar.min.js"></script>
+    <script language="javascript">
+
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+
+        var calendar = $('#calendar').fullCalendar(
+                {
+                    header:
+                    {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: ''//'month,agendaWeek,agendaDay'
+                    },
+                    select: function (start, end, allDay, callback) {
+                        var title = prompt('Event Title:');
+                        var titles = title;
+                        var startDate = start;
+                        var endDate = end;
+
+                        var eventData;
+                        eventData = {
+                            title1: title,
+                            startDay1: startDate,
+                            endDay1: endDate,
+                        };
+
+                        calendar.fullCalendar('renderEvent',
+								{
+								    title: title,
+								    start: start,
+								    end: end,
+								    color: "green"
+								},
+								true
+							);
+                        alert("The event is rendered.")
+                    },
+                    defaultView: 'month',
+                    selectable: true,
+                    selectHelper: true,
+                    eventMouseover: function (event, jsEvent, view) {
+                    },
+                    eventDestroy: function (event, element, view) {
+
+                    },
+                    eventClick: function (calEvent, jsEvent, view) {
+                        alert("An event is clicked.");
+                    },
+                    dayClick: function () {
+                        //alert("A day is clicked");
+                    }
+
+                });
+    </script>
+</head>
+<body>
+    <!-- Content start -->
+    <div class="row">
+        <div id="fluid">
+            <div id="calendar" class="calendar">Calendar</div>
+        </div>
     </div>
-</div>
-<div class="row">
-    Hello World!
-</div>
-<div class="row-space"></div>
-<div class="row">
-    Hello World!
-</div>
-<!-- Content end -->
+    <!-- Content end -->
+</body>
+</html>

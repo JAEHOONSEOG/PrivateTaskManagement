@@ -272,3 +272,4 @@ var setting = (function (obj) {
         });
     }
 });
+
