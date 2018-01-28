@@ -111,7 +111,8 @@ var navi = {
             ins.loadPage("cardmenu");
         });
         $(document).on("click", "#CalendarPanel,#CalendarMenu", function () {
-            ins.loadPage("cardmenu");
+            //ins.loadPage("cardmenu");
+            ins.loadPage("calendar");
         });
         $(document).on("click", "#TaskPanel,#TaskMenu", function () {
             ins.loadPage("cardmenu");
@@ -123,6 +124,9 @@ var navi = {
             ins.loadPage("setting");
         });
         ins.loadPage("cardmenu");
+    },
+    calendar: function (node) {
+        ins.loadContents(node.Data);
     },
     cardmenu: function (node) {
         ins.loadContents(node.Data);

@@ -113,7 +113,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>$(SolutionDir)PTM.Web\Build.bat</PreBuildEvent>
+    <PreBuildEvent>"C:\Users\JAEHOON SEOG\Source\Repos\PrivateTaskManagement\PTM.Web\Build.bat"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>

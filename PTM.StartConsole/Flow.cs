@@ -15,6 +15,7 @@ namespace PTM.StartConsole
             Add("memolist", MemoList);
             Add("memoinsert", MemoInsert);
             Add("setting", Setting);
+            Add("calendar", Calendar);
         }
         private void Error(WSNode node)
         {
@@ -42,6 +43,10 @@ namespace PTM.StartConsole
         private void MemoList(WSNode node)
         {
             node.Data = ServerFactory.GetInstance().GetZipFile(@"/flow/memolist.html").ToString();
+        }
+        private void Calendar(WSNode node)
+        {
+            node.Data = ServerFactory.GetInstance().GetZipFile(@"/flow/calendar.html").ToString();
         }
         public void Execute(String key, WSNode node)
         {

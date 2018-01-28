@@ -11,6 +11,7 @@
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)css\common.css" />
     <Content Include="$(MSBuildThisFileDirectory)css\sb-admin-2.css" />
+    <Content Include="$(MSBuildThisFileDirectory)flow\calendar.html" />
     <Content Include="$(MSBuildThisFileDirectory)flow\cardmenu.html" />
     <Content Include="$(MSBuildThisFileDirectory)flow\memoinsert.html" />
     <Content Include="$(MSBuildThisFileDirectory)flow\memolist.html" />
