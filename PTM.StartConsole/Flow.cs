@@ -15,11 +15,8 @@ namespace PTM.StartConsole
             Add("memolist", MemoList);
             Add("memoinsert", MemoInsert);
             Add("setting", Setting);
-<<<<<<< HEAD
             Add("calendar", Calendar);
-=======
             Add("task", _Task);
->>>>>>> upstream/master
         }
         private void Error(WSNode node)
         {
