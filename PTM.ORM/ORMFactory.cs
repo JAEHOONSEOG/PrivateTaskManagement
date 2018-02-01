@@ -39,6 +39,7 @@ namespace PTM.ORM
             servicemap = new Dictionary<Type, IDao>();
             // DI Bindings
             servicemap.Add(typeof(IMemoDao), new MemoDao(db));
+            servicemap.Add(typeof(ITaskDao), new TaskDao(db));
         }
     }
 }

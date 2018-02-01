@@ -70,6 +70,7 @@
     <Compile Include="Message.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util.cs" />
     <Compile Include="Util\ConfigSystem.cs" />
     <Compile Include="WSNode.cs" />
   </ItemGroup>
@@ -113,7 +114,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
+<<<<<<< HEAD
     <PreBuildEvent>"C:\Users\JAEHOON SEOG\Source\Repos\PrivateTaskManagement\PTM.Web\Build.bat"</PreBuildEvent>
+=======
+    <PreBuildEvent>"$(SolutionDir)PTM.Web\Build.bat"</PreBuildEvent>
+>>>>>>> upstream/master
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>

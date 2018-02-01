@@ -17,6 +17,7 @@
     <Content Include="$(MSBuildThisFileDirectory)flow\memoinsert.html" />
     <Content Include="$(MSBuildThisFileDirectory)flow\memolist.html" />
     <Content Include="$(MSBuildThisFileDirectory)flow\setting.html" />
+    <Content Include="$(MSBuildThisFileDirectory)flow\task.html" />
     <Content Include="$(MSBuildThisFileDirectory)index.html" />
   </ItemGroup>
   <ItemGroup>
